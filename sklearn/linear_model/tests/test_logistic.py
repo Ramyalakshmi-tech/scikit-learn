@@ -1554,6 +1554,22 @@ def test_LogisticRegressionCV_no_refit(multi_class):
     assert lrcv.coef_.shape == (n_classes, n_features)
 
 
+def test_LogisticRegressionCV_no_refit_binary():
+    # Test no error for binary classification with l2 penalty and refit=False
+    rng = np.random.RandomState(0)
+    X = rng.randn(100, 3)
+    beta = rng.randn(3)
+    intercept = rng.randn()
+    y = np.sign(intercept + X.dot(beta))
+
+    lr = LogisticRegressionCV(cv=5, solver='saga', tol=1e-2,
+                              refit=False, random_state=0)
+    # Should not raise an error
+    lr.fit(X, y)
+    assert lr.coef_.shape == (1, X.shape[1])
+    assert lr.C_.shape == (1,)
+    assert lr.intercept_.shape == (1,)
+
 def test_LogisticRegressionCV_elasticnet_attribute_shapes():
     # Make sure the shapes of scores_ and coefs_paths_ attributes are correct
     # when using elasticnet (added one dimension for l1_ratios)
