@@ -1554,6 +1554,15 @@ def test_LogisticRegressionCV_no_refit(multi_class):
     assert lrcv.coef_.shape == (n_classes, n_features)
 
 
+def test_LogisticRegressionCV_no_refit_auto_binary():
+    X, y = make_classification(n_samples=20, n_features=5, n_classes=2,
+                               n_informative=5, random_state=0)
+
+    lrcv = LogisticRegressionCV(cv=3, refit=False, solver='liblinear')
+    lrcv.fit(X, y)
+    assert lrcv.coef_.shape == (1, 5)
+
+
 def test_LogisticRegressionCV_elasticnet_attribute_shapes():
     # Make sure the shapes of scores_ and coefs_paths_ attributes are correct
     # when using elasticnet (added one dimension for l1_ratios)
